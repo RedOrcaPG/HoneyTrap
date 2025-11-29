@@ -22,13 +22,13 @@ IDS_Scanner memerlukan dua modul Python utama: **Scapy** dan **NetfilterQueue**.
 
 Sebelum menginstal paket Python, instal *development libraries* yang diperlukan untuk kompilasi:
 
-```bash
 sudo apt update
 sudo apt install build-essential libnetfilter-queue-dev libffi-dev -y
 
 ### 🐍 Menggunakan Virtual Environment (VENV)
 
 Sangat disarankan untuk menjalankan *script* ini di dalam $\text{VENV}$ untuk mengisolasi *dependency* dari instalasi Python sistem Anda.
+```bash
 
 1.  **Buat VENV:**
     ```bash
