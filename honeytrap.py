@@ -10,8 +10,8 @@ from collections import defaultdict
 LOG_FILE = "/var/log/ids_scanner.log" 
 CSV_FILE = "ids_alerts.csv"         # Nama file CSV untuk analisis skripsi
 QUEUE_NUM = 0                       
-SCAN_THRESHOLD = 5                  # Batas paket dalam TIME_WINDOW
-TIME_WINDOW = 5                     # Jendela waktu (detik) untuk rate limiting
+SCAN_THRESHOLD = 20                  # Batas paket dalam TIME_WINDOW
+TIME_WINDOW = 2                     # Jendela waktu (detik) untuk rate limiting
 SESSION_TIMEOUT = 10                # Waktu (detik) untuk melupakan sesi SYN yang lama
 
 # --- WAKTU AWAL CAPTURE (UNTUK WAKTU RELATIF) ---
@@ -93,7 +93,7 @@ def check_for_scan_rate(src_ip):
     SCAN_TRACKER[src_ip].append((current_time, 1))
     total_packets = sum(c for t, c in SCAN_TRACKER[src_ip])
     
-    if total_packets > SCAN_THRESHOLD:
+    if total_packets < SCAN_THRESHOLD:
         return True, total_packets
     
     return False, total_packets
@@ -162,6 +162,7 @@ def packet_handler(pkt):
                 if session['state'] == 'SYN_SENT' and (current_time - session['time'] <= SESSION_TIMEOUT):
                     final_scan_type = "Full TCP Connect Scan"
                     is_valid_session = True
+                    
                     # Hapus sesi karena sudah dianggap selesai
                     del SESSION_TRACKER[ip_src][dest_port]
             
